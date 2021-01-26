@@ -10,7 +10,7 @@ const usersRouter = require('./routes/users');
 const commentsRouter = require('./routes/comments');
 
 const app = express();
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3002);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
   express: app,
@@ -20,7 +20,7 @@ connect();
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json);
+app.use(express.json()); // body-parser 붙일 때 json()임에 조심 json으로 하면 빨간 줄은 아니지만 실행하면 화면 무한 로딩 됨
 app.use(express.urlencoded({ extended: false }));
 
 // 라우터 연결
@@ -41,5 +41,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(app.get('port'), () => {
-  console.log(app.get('port', '번 포트에서 대기 중'));
+  console.log(app.get('port'), '번 포트에서 대기 중');
 });

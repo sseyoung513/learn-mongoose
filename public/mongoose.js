@@ -58,13 +58,16 @@ async function getComment(id) {
       row.appendChild(td);
       const edit = document.createElement('button');
       edit.textContent = '수정';
-      edit.addEventListener('click', async () => { // 수정 클릭 시
+      edit.addEventListener('click', async () => {
+        // 수정 클릭 시
         const newComment = prompt('바꿀 내용을 입력하세요');
         if (!newComment) {
           return alert('내용을 반드시 입력하셔야 합니다');
         }
         try {
-          await axios.patch(`/comments/${comment._id}`, { comment: newComment });
+          await axios.patch(`/comments/${comment._id}`, {
+            comment: newComment,
+          });
           getComment(id);
         } catch (err) {
           console.error(err);
@@ -72,7 +75,8 @@ async function getComment(id) {
       });
       const remove = document.createElement('button');
       remove.textContent = '삭제';
-      remove.addEventListener('click', async () => { // 삭제 클릭 시
+      remove.addEventListener('click', async () => {
+        // 삭제 클릭 시
         try {
           await axios.delete(`/comments/${comment._id}`);
           getComment(id);
@@ -116,22 +120,24 @@ document.getElementById('user-form').addEventListener('submit', async (e) => {
   e.target.married.checked = false;
 });
 // 댓글 등록 시
-document.getElementById('comment-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const id = e.target.userid.value;
-  const comment = e.target.comment.value;
-  if (!id) {
-    return alert('아이디를 입력하세요');
-  }
-  if (!comment) {
-    return alert('댓글을 입력하세요');
-  }
-  try {
-    await axios.post('/comments', { id, comment });
-    getComment(id);
-  } catch (err) {
-    console.error(err);
-  }
-  e.target.userid.value = '';
-  e.target.comment.value = '';
-});
+document
+  .getElementById('comment-form')
+  .addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = e.target.userid.value;
+    const comment = e.target.comment.value;
+    if (!id) {
+      return alert('아이디를 입력하세요');
+    }
+    if (!comment) {
+      return alert('댓글을 입력하세요');
+    }
+    try {
+      await axios.post('/comments', { id, comment });
+      getComment(id);
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.userid.value = '';
+    e.target.comment.value = '';
+  });
